@@ -1,23 +1,12 @@
-function position = forward_kinematics(angles)
+function pose = forward_kinematics(angles)
+% returns [x,y,z,alph,beta,gamma]'.
 
 % a, alpha, d, theta
-
-DH_values = [0 0 101 angles(1)*(pi/180);
-    35 pi/2 0 angles(2)*(pi/180);
-    0 -pi/2 120 0;
-    0 pi/2 0 angles(3)*(pi/180);
-    23 0 0 pi/2;
-    0 pi/2 0 angles(4)*(pi/180);
-    0 pi 120 0;
-    0 -pi/2 0 angles(5)*(pi/180);
-    29 0 0 0;
-    0 -pi/2 0 angles(6)*(pi/180)];
-
 DH_values_2 = [0 0 101 angles(1)*(pi/180);
     35 pi/2 0 angles(2)*(pi/180);
     0 -pi/2 120 0;
     0 pi/2 0 angles(3)*(pi/180);
-    0 0 0 pi/2;
+    0 0 0 pi/2; %Usikker hvor joint 3 er til
     23 pi/2 0 angles(4)*(pi/180);
     0 0 120 0;
     0 -pi/2 0 angles(5)*(pi/180);
@@ -49,14 +38,18 @@ for i= 1:4
 position(:,i) = joint_positions(1:3,i);
 end
 
+
 % Calculate orientation by euler angles, x-y-z
-beta = rad2deg(atan2(-T(3,1), sqrt(T(1,1)^2 + T(2,1)^2)))
+beta = rad2deg(atan2(-T(3,1), sqrt(T(1,1)^2 + T(2,1)^2)));
 if (cos(beta) ~= 0)
-alpha = rad2deg(atan2(T(2,1)/cos(beta),T(1,1)/cos(beta)))
-gamma = rad2deg(atan2(T(3,2)/cos(beta),T(3,3)/cos(beta)))
+alpha = rad2deg(atan2(T(2,1)/cos(beta),T(1,1)/cos(beta)));
+gamma = rad2deg(atan2(T(3,2)/cos(beta),T(3,3)/cos(beta)));
 end
 
+pose = [position(:,4)', alpha, beta, gamma]';
+
 end
+
 %% Transform matrix from i-1 to i
 function T = transform_matrix(parameters)
 % % a, alpha, d, theta
