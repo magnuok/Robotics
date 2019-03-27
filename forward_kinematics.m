@@ -1,4 +1,4 @@
-function pose = forward_kinematics(angles)
+function [pose, T] = forward_kinematics(angles)
 % returns [x,y,z,alph,beta,gamma]'.
 
 % a, alpha, d, theta
@@ -46,7 +46,9 @@ alpha = rad2deg(atan2(T(2,1)/cos(beta),T(1,1)/cos(beta)));
 gamma = rad2deg(atan2(T(3,2)/cos(beta),T(3,3)/cos(beta)));
 end
 
+T
 pose = [position(:,4)', alpha, beta, gamma]';
+
 
 end
 
